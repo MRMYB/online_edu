@@ -12,7 +12,6 @@ public class OnlineApplication {
 
         SpringApplication.run(OnlineApplication.class, args);
 
-
         System.out.println("--------------------------------程序完全启动--------------------------------------");
 
 

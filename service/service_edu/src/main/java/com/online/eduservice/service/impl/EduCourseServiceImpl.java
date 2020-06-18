@@ -3,11 +3,14 @@ package com.online.eduservice.service.impl;
 import com.online.eduservice.entity.EduCourse;
 import com.online.eduservice.entity.EduCourseDescription;
 import com.online.eduservice.entity.vo.CourseInfoVo;
-import com.online.eduservice.entity.vo.CoursePublicVo;
+
+import com.online.eduservice.entity.vo.CoursePublishVo;
 import com.online.eduservice.mapper.EduCourseMapper;
+import com.online.eduservice.service.EduChapterService;
 import com.online.eduservice.service.EduCourseDescriptionService;
 import com.online.eduservice.service.EduCourseService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.online.eduservice.service.EduVideoService;
 import com.online.servicebase.exceptionhandler.GuliException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,12 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
     //添加课程  EduCourse实体类中没有 description课程简介描字段,需注入进来实现数据库操作
     @Autowired
     private EduCourseDescriptionService courseDescriptionService;
+
+    @Autowired
+    private EduVideoService videoService;
+
+    @Autowired
+    private EduChapterService chapterService;
 
     //添加课程信息 与课程描述信息
     @Override
@@ -61,7 +70,6 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
         EduCourse eduCourse = baseMapper.selectById(courseId);
         CourseInfoVo courseInfoVo =new CourseInfoVo();
         BeanUtils.copyProperties(eduCourse,courseInfoVo);
-
         //2.获取课程描述表
         EduCourseDescription courseDescription =courseDescriptionService.getById(courseId);
         courseInfoVo.setDescription(courseDescription.getDescription());
@@ -90,8 +98,30 @@ public class EduCourseServiceImpl extends ServiceImpl<EduCourseMapper, EduCourse
 
     //根据课程id查询课程确认信息
     @Override
-    public CoursePublicVo getPublicCourseIfo(String id) {
-        CoursePublicVo publicCourseIfo = baseMapper.getPublicCourseIfo(id);
-        return publicCourseIfo;
+    public CoursePublishVo getPublishCourseInfo(String id) {
+        CoursePublishVo publishCourseInfo = baseMapper.getPublishCourseInfo(id);
+        return publishCourseInfo;
+    }
+
+
+    //删除课程信息 同时删除课程下面的所有信息
+    //从底部删除
+    @Override
+    public void removeCourse(String courseId) {
+        //1.删除小节
+        videoService.removeVideoByCourseId(courseId);
+
+        //2.删除章节
+        chapterService.removeChapterByCourseId(courseId);
+
+        //3.根据课程id 删除课程简介描述
+        courseDescriptionService.removeById(courseId);
+
+        //4.根据课程id 删除课程信息
+        int result = baseMapper.deleteById(courseId);
+        if(result==0){
+            throw new  GuliException(20001,"删除课程失败");
+        }
+
     }
 }

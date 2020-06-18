@@ -4,7 +4,7 @@ import lombok.Data;
 
 //用于课程发布显示信息
 @Data
-public class CoursePublicVo {
+public class CoursePublishVo {
 
     private  String id;  //课程id
     private  String title;  //课程标题
@@ -13,5 +13,5 @@ public class CoursePublicVo {
     private  String subjectLevelOne; //一级分类
     private  String subjectLevelTwo; //二级分类
     private  String teacherName;  //讲师名称
-    private  String price; //费用
+    private  String price; //费用   只用于显示
 }

@@ -17,9 +17,14 @@ import java.util.List;
 public interface EduChapterService extends IService<EduChapter> {
 
     //课程大纲列表，根据课程id 进行查询 章节与小节
-    List<ChapterVo> getChapterVideo(String courseId);
+    List<ChapterVo> getChapterVideoByCourseId(String courseId);
 
 
     //删除章节  章节删除会一同删除掉其中所有的小节
     boolean deleteChapter(String chapterId);
+
+
+    //根据课程id删除章节
+    void removeChapterByCourseId(String courseId);
+
 }

@@ -37,7 +37,7 @@ public class EduChapterServiceImpl extends ServiceImpl<EduChapterMapper, EduChap
     //一门课程 有多个章节
     //一个章节 有多个小节
     @Override
-    public List<ChapterVo> getChapterVideo(String courseId) {
+    public List<ChapterVo> getChapterVideoByCourseId(String courseId) {
         //1 根据课程id 查询课程里面所有的章节
         QueryWrapper<EduChapter> wrapperChapter =new QueryWrapper<>();
         wrapperChapter.eq("course_id",courseId);
@@ -47,7 +47,6 @@ public class EduChapterServiceImpl extends ServiceImpl<EduChapterMapper, EduChap
         QueryWrapper<EduVideo> wrapperVideo = new QueryWrapper<>();
         wrapperVideo.eq("course_id",courseId);
         List<EduVideo> eduVideoList = videoService.list(wrapperVideo);
-
 
         //创建list集合 进行封装
         List<ChapterVo> finalList =new ArrayList<>();
@@ -81,6 +80,7 @@ public class EduChapterServiceImpl extends ServiceImpl<EduChapterMapper, EduChap
         return finalList;
     }
 
+
     //删除章节
     @Override
     public boolean deleteChapter(String chapterId) {
@@ -92,15 +92,22 @@ public class EduChapterServiceImpl extends ServiceImpl<EduChapterMapper, EduChap
             throw new GuliException(20001,"不能删除");
         }else {
             int result = baseMapper.deleteById(chapterId);
-//            if(result>0){
-//                return true;
-//            }else{
-//                return false;
-//            }
-            return  result>0; //0 失败 1 成功
+            if(result>0){
+                return true;
+            }else{
+                return false;
+            }
+//            return  result>0; //0 失败 1 成功
         }
 
 
 
+    }
+
+    @Override
+    public void removeChapterByCourseId(String courseId) {
+        QueryWrapper<EduChapter> wrapper = new QueryWrapper<>();
+        wrapper.eq("course_id",courseId);
+        baseMapper.delete(wrapper);
     }
 }

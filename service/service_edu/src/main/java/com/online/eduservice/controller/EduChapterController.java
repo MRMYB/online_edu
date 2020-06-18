@@ -3,11 +3,14 @@ package com.online.eduservice.controller;
 
 import com.online.commonutils.R;
 import com.online.eduservice.entity.EduChapter;
+import com.online.eduservice.entity.chapter.ChapterVo;
 import com.online.eduservice.service.EduChapterService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -20,16 +23,18 @@ import org.springframework.web.bind.annotation.*;
 @Api(value = "章节管理接口", tags = "章节管理接口")
 @RestController
 @RequestMapping("/eduservice/chapter")
+@CrossOrigin
 public class EduChapterController {
 
     @Autowired
     private EduChapterService chapterService;
 
+
     //课程大纲列表，根据课程id 进行查询 章节与小节
     @GetMapping("/getChapterVideo/{courseId}")
     public  R getChapterVideo(@PathVariable String courseId){
-
-        return  R.ok();
+        List<ChapterVo> list = chapterService.getChapterVideoByCourseId(courseId);
+        return  R.ok().data("allChapterVideo",list);
     }
 
 
@@ -67,8 +72,13 @@ public class EduChapterController {
     @ApiOperation(value = "删除章节")
     @DeleteMapping("/{chapterId}")
     public R deleteChapter(@PathVariable String chapterId) {
-        chapterService.deleteChapter(chapterId);
-        return R.ok();
+        boolean flag = chapterService.deleteChapter(chapterId);
+        if(flag){
+            return R.ok();
+        }else {
+            return R.error();
+        }
+
     }
 
 }

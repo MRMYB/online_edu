@@ -55,14 +55,11 @@ public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubj
         //一级分类查询结果
         List<EduSubject> oneSubjectList = baseMapper.selectList(wrapperOne);
 
-
         //2.查询出二级分类数据
         //条件 parent_id !=0 利用条件构造器QueryWrapper<>
         QueryWrapper<EduSubject> wrapperTwo = new QueryWrapper<>();
-//        wrapperTwo.ne("parent_id", "0");
         wrapperTwo.ne("parent_id","0");
         List<EduSubject> twoSubjectList = baseMapper.selectList(wrapperTwo);
-
 
         //创建list集合 用于存储最终封装的一二级分类数据
         List<OneSubject> finalSubjectList = new ArrayList<>();
@@ -73,9 +70,6 @@ public class EduSubjectServiceImpl extends ServiceImpl<EduSubjectMapper, EduSubj
             EduSubject eduSubject = oneSubjectList.get(i);
 
             OneSubject oneSubject = new OneSubject();
-            //第一种 一个一个set (当字段较少时可以使用 ,不推荐)
-            //oneSubject.setId(eduSubject.getId());
-            //oneSubject.setTitle(eduSubject.getTitle());
             //第二种 使用内置工具类BeanUtils.copyProperties(拷贝目标，拷贝到的对象目标)
             BeanUtils.copyProperties(eduSubject,oneSubject);
 

@@ -68,25 +68,12 @@ public class EduTeacherController {
         //创建page对象
         Page<EduTeacher> pageTeacher = new Page<>(current,limit);
 
-//        try {
-//            int i = 10/0;
-//        }catch(Exception e) {
-//            //执行自定义异常
-//            throw new GuliException(20001,"执行了自定义异常处理....");
-//        }
-
-
         //调用方法实现分页
         //调用方法时候，底层封装，把分页所有数据封装到pageTeacher对象里面
         teacherService.page(pageTeacher,null);
 
         long total = pageTeacher.getTotal();//总记录数
         List<EduTeacher> records = pageTeacher.getRecords(); //数据list集合
-
-//        Map map = new HashMap();
-//        map.put("total",total);
-//        map.put("rows",records);
-//        return R.ok().data(map);
 
         return R.ok().data("total",total).data("rows",records);
     }

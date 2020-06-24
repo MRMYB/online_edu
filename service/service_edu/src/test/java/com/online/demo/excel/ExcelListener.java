@@ -5,10 +5,10 @@ import com.alibaba.excel.event.AnalysisEventListener;
 
 import java.util.Map;
 
-public class ExcelListener  extends AnalysisEventListener<DemoData> {
+public class ExcelListener  extends AnalysisEventListener<MergeExcel> {
     //监听器 读取解析excel内容
     @Override
-    public void invoke(DemoData data, AnalysisContext analysisContext) {
+    public void invoke(MergeExcel data, AnalysisContext analysisContext) {
         System.out.println("****"+data);
     }
 

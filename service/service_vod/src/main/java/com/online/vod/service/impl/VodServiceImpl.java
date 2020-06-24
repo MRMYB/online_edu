@@ -9,11 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.util.List;
 
 @Service
 public class VodServiceImpl implements VodService {
     @Override
-    public String uploadAlyiVideo(MultipartFile file) {
+    public String uploadVideoAly(MultipartFile file) {
         try {
             //accessKeyId, accessKeySecret
             //fileName：上传文件原始名称
@@ -39,5 +40,10 @@ public class VodServiceImpl implements VodService {
             e.printStackTrace();
             return null;
         }
+    }
+
+    @Override
+    public void removeMoreAlyVideo(List<String> videoIdList) {
+
     }
 }
